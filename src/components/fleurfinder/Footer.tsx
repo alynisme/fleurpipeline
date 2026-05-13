@@ -7,10 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 // 🔧 Ganti URL di bawah ini dengan Linktree asli FLEUR PIPELINE
 const LINKTREE_URL = "https://linktr.ee/fleurbouquetbandung";
 
-// ⚠️  PENTING: Ganti "YOUR_FORM_ID" dengan ID dari dashboard Formspree kamu.
-//    Cara dapat ID: Login di formspree.io → New Form → email: alyniche@gmail.com → salin ID (format: xabcd1234)
-//    Contoh endpoint yang benar: https://formspree.io/f/xabcd1234
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+// 🔧 Formspree endpoint — menggunakan email langsung (pastikan sudah diverifikasi di formspree.io)
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/alyniche@gmail.com";
 
 export default function Footer() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
@@ -208,6 +206,11 @@ export default function Footer() {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* 🔔 Pengingat aktivasi untuk Admin */}
+            <p className="text-[10px] text-gray-400 mt-4 italic leading-relaxed">
+              *check ur inbox
+            </p>
           </div>
         </div>
 
