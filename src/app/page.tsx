@@ -5,6 +5,7 @@ import { Flower, Leaf, Info, Star } from "lucide-react";
 import FleurFinderForm from "@/components/fleurfinder/FleurFinderForm";
 import FAQSection from "@/components/fleurfinder/FAQSection";
 import Footer from "@/components/fleurfinder/Footer";
+import PaymentModal from "@/components/fleurfinder/PaymentModal";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 
@@ -62,6 +63,7 @@ export default function Page() {
   const carouselRef = useRef<HTMLDivElement>(null);
   const dragX = useMotionValue(0);
   const [activeTestiIndex, setActiveTestiIndex] = useState(0);
+  const [paymentModal, setPaymentModal] = useState<{ name: string; price: string } | null>(null);
 
   useMotionValueEvent(dragX, "change", (latest) => {
     const itemWidth = 320; // Approx card width + gap
@@ -124,11 +126,11 @@ export default function Page() {
           <div className="h-[2px] w-12 md:w-24 bg-gradient-to-l from-transparent to-pink-400 rounded-full"></div>
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-bold font-playfair text-gray-800 drop-shadow-sm leading-tight">
-          FleurFinder:<br/>
+        <h1 className="text-5xl md:text-7xl font-bold font-sans text-gray-800 drop-shadow-sm leading-tight">
+          FLEUR PIPELINE:<br/>
           <span className="text-pink-600">Temukan Bahasa Bunga untuk Si Dia</span>
         </h1>
-        <p className="text-lg md:text-xl font-montserrat text-gray-700 max-w-2xl mx-auto leading-relaxed mt-6">
+        <p className="text-lg md:text-xl font-sans text-gray-700 max-w-2xl mx-auto leading-relaxed mt-6">
           Sistem rekomendasi buket personal untuk membantu Anda memilih bunga yang paling tepat, sesuai budget dan situasi.
         </p>
       </motion.div>
@@ -153,55 +155,82 @@ export default function Page() {
         transition={{ duration: 0.8 }}
         className="w-full max-w-6xl mx-auto z-10 text-center mt-10"
       >
-        <h2 className="text-4xl font-playfair font-bold text-gray-800 mb-4">Inspirasi Buket Terpopuler</h2>
-        <p className="text-gray-600 font-montserrat mb-12 max-w-2xl mx-auto">Sembari mencari, lihatlah beberapa karya buket pilihan pelanggan kami yang telah sukses menyampaikan perasaan mereka.</p>
+        <h2 className="text-4xl font-sans font-bold text-gray-800 mb-4">Inspirasi Buket Terpopuler</h2>
+        <p className="text-gray-600 font-sans mb-12 max-w-2xl mx-auto">Sembari mencari, lihatlah beberapa karya buket pilihan pelanggan kami yang telah sukses menyampaikan perasaan mereka.</p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             {
-              name: "Peony Dreams",
-              image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?q=80&w=800&auto=format&fit=crop",
-              desc: "Romansa dan kemakmuran dalam satu genggaman.",
+              name: "Blue Roses Bouquet",
+              image: "/bluerosesbouquet.jpg",
+              desc: "Misteri, keunikan, dan kemustahilan yang menjadi nyata.",
+              priceDisplay: "300k",
             },
             {
-              name: "Classic Romance",
-              image: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=800&auto=format&fit=crop",
-              desc: "Mawar merah premium penanda cinta yang mendalam.",
+              name: "Bunny Tiger Lily Bouquet",
+              image: "/bunnytigerlilybouquet.jpg",
+              desc: "Keberanian, kekayaan, dan pesona yang menggemaskan.",
+              priceDisplay: "250k",
             },
             {
-              name: "Sunshine Smile",
-              image: "https://images.unsplash.com/photo-1470509037663-253afd7f0f51?auto=format&fit=crop&w=800&q=80",
-              desc: "Bunga matahari yang ceria untuk mencerahkan harinya.",
+              name: "Classic Rose Bouquet",
+              image: "/classicrosebouquet.jpg",
+              desc: "Simbol romansa abadi dan kemewahan.",
+              priceDisplay: "120k",
             },
             {
-              name: "White Lilies Elegance",
-              image: "https://images.unsplash.com/photo-1508784411316-02b8cd4d3a3a?auto=format&fit=crop&w=800&q=80",
-              desc: "Kemurnian, keanggunan, dan ketulusan hati.",
+              name: "Cookies and Flower Basket",
+              image: "/cookiesandflowerbasket.jpg",
+              desc: "Kehangatan, persahabatan, dan rasa manis dalam hidup.",
+              priceDisplay: "75k",
             },
             {
-              name: "Ocean Hydrangeas",
-              image: "https://images.unsplash.com/photo-1468327768560-75b778cbb551?q=80&w=800&auto=format&fit=crop",
-              desc: "Rasa syukur yang mendalam dan pemahaman.",
+              name: "Custom Flower Language Bouquet",
+              image: "/customflowerlanguagebouquet.jpg",
+              desc: "Pesan tersembunyi yang disesuaikan khusus untuknya.",
+              priceDisplay: "70k",
             },
             {
-              name: "Ethereal Breath",
-              image: "https://images.unsplash.com/photo-1508784411316-02b8cd4d3a3a?q=80&w=800&auto=format&fit=crop",
-              desc: "Cinta yang murni dan kepolosan abadi.",
+              name: "Custom Makeup (BUNDLE)",
+              image: "/custommakeupbouquet.jpg",
+              desc: "Perhatian dan perawatan tulus untuk kesehariannya.",
+              priceDisplay: "150k (exclude makeup)",
             },
             {
-              name: "Purple Tulips",
-              image: "https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&q=80&w=600",
-              desc: "Keanggunan yang sempurna dan pesona royal.",
+              name: "Custom Skincare Bouquet",
+              image: "/customskincarebouquet.jpg",
+              desc: "Simbol perlindungan, kelembutan, dan cinta diri.",
+              priceDisplay: "150k (exclude skincare)",
             },
             {
-              name: "Sunset Gerberas",
-              image: "https://images.unsplash.com/photo-1496062031456-07b8f162a322?q=80&w=800&auto=format&fit=crop",
-              desc: "Kehangatan, keceriaan, dan energi positif.",
+              name: "Lacy Lily Bouquet",
+              image: "/lacylilybouquet.jpg",
+              desc: "Keanggunan yang suci dan ketulusan hati.",
+              priceDisplay: "90k",
             },
             {
-              name: "Pastel Carnations",
-              image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&q=80&w=600",
-              desc: "Pesona klasik dengan sentuhan kasih sayang lembut.",
+              name: "Lego Roses Bouquet",
+              image: "/legorosesbouquet.jpg",
+              desc: "Cinta yang dibangun perlahan dan bertahan selamanya.",
+              priceDisplay: "170k",
+            },
+            {
+              name: "Lilac Lily Single Bouquet",
+              image: "/lilaclilysinglebouquet.jpg",
+              desc: "Pesona anggun, kemurnian, dan ketenangan jiwa.",
+              priceDisplay: "25k",
+            },
+            {
+              name: "Single Tulip Bouquet",
+              image: "/singletulipbouquet.jpg",
+              desc: "Pengakuan cinta yang murni dan tulus.",
+              priceDisplay: "20k",
+            },
+            {
+              name: "Themed Bouquet",
+              image: "/themedbouquet.jpg",
+              desc: "Perayaan karakter dan keunikan personal.",
+              priceDisplay: "20k",
             }
           ].map((flower, idx) => (
             <motion.div 
@@ -238,23 +267,22 @@ export default function Page() {
                       hover: { opacity: 1, y: 0, scale: 1, pointerEvents: "auto" }
                     }}
                     transition={{ duration: 0.2 }}
-                    className="absolute bottom-full right-0 mb-2 w-48 p-4 rounded-xl bg-white shadow-xl border border-pink-100 text-xs text-gray-600 font-montserrat text-left origin-bottom-right"
+                    className="absolute bottom-full right-0 mb-2 w-48 p-4 rounded-xl bg-white shadow-xl border border-pink-100 text-xs text-gray-600 font-sans text-left origin-bottom-right"
                   >
-                    <div className="font-bold text-pink-700 mb-1 font-playfair text-sm">Bahasa Bunga:</div>
+                    <div className="font-bold text-pink-700 mb-1 font-sans text-sm">Bahasa Bunga:</div>
                     {flower.desc}
                   </motion.div>
                 </motion.div>
               </div>
-              <h3 className="text-2xl font-playfair font-bold text-pink-700 mb-2">{flower.name}</h3>
-              <p className="text-gray-600 font-montserrat text-sm pb-4 flex-grow">{flower.desc}</p>
-              <a 
-                href={`https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20pesan%20buket%20${encodeURIComponent(flower.name)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full mt-auto py-3 rounded-xl bg-pink-500 text-white font-semibold hover:bg-pink-600 transition-colors shadow-md hover:shadow-pink-500/30 text-sm"
+              <h3 className="text-2xl font-bold text-pink-700 mb-1">{flower.name}</h3>
+              <p className="text-pink-600 font-bold mb-2">{flower.priceDisplay}</p>
+              <p className="text-gray-600 font-sans text-sm pb-4 flex-grow">{flower.desc}</p>
+              <button
+                onClick={() => setPaymentModal({ name: flower.name, price: flower.priceDisplay })}
+                className="w-full mt-auto py-3 rounded-xl bg-pink-500 text-white font-semibold hover:bg-pink-600 transition-colors shadow-md hover:shadow-pink-300/50 text-sm"
               >
-                Pesan Langsung
-              </a>
+                Pesan Sekarang
+              </button>
             </motion.div>
           ))}
         </div>
@@ -268,8 +296,8 @@ export default function Page() {
         transition={{ duration: 0.8 }}
         className="w-full max-w-6xl mx-auto z-10 text-center mt-24 px-4"
       >
-        <h2 className="text-4xl font-playfair font-bold text-gray-800 mb-4">Apa Kata Mereka</h2>
-        <p className="text-gray-600 font-montserrat mb-16 max-w-2xl mx-auto">Kisah cinta dan senyum yang mekar berkat FleurFinder.</p>
+        <h2 className="text-4xl font-sans font-bold text-gray-800 mb-4">Apa Kata Mereka</h2>
+        <p className="text-gray-600 font-sans mb-16 max-w-2xl mx-auto">Kisah cinta dan senyum yang mekar berkat FLEUR PIPELINE.</p>
         
         <div ref={carouselRef} className="cursor-grab overflow-hidden w-full py-10 mt-2">
           <motion.div 
@@ -282,12 +310,12 @@ export default function Page() {
               { name: "Sasha", age: 17, category: "Kado Bestie", text: "Lucu bangeeet buat ngasih surprise ke bestie yang lagi ultah. Wanginya awet dan desainnya gak pasaran sama sekali! 💖", color: "bg-pink-100/60" },
               { name: "Amel", age: 18, category: "Anniversary", text: "Buketnya super aesthetic! Ngasih ini ke pacar pas anniv, dia sampe nangis terharu. Packagingnya premium parah sih.", color: "bg-pink-50/80" },
               { name: "Raka", age: 19, category: "Buat Crush", text: "Sumpah ngebantu banget! Gue bingung mau ngasih apa buat crush, eh direkomendasiin buket gerbera. Langsung di-notice dong! 😭✨", color: "bg-pink-100/80" },
-              { name: "Dika", age: 20, category: "Minta Maaf", text: "Penyelamat pas lagi ngambek-ngambekan woy! Beli peony dari sini, langsung dimaafin. Thanks FleurFinder! 🙏", color: "bg-rose-100/80" },
+              { name: "Dika", age: 20, category: "Minta Maaf", text: "Penyelamat pas lagi ngambek-ngambekan woy! Beli peony dari sini, langsung dimaafin. Thanks FLEUR PIPELINE! 🙏", color: "bg-rose-100/80" },
               { name: "Vanya", age: 21, category: "Self Reward", text: "Self reward beli bunga buat diri sendiri gapapa kan? Jujurly bikin kamar jadi makin aesthetic dan mood naik tiap hari 🌸", color: "bg-pink-50/90" },
               { name: "Nadia", age: 22, category: "Wisuda", text: "Dipake buat foto wisuda cakep polll. Warnanya on point banget sama kebaya gue, temen-temen pada nanyain beli di mana wkwk.", color: "bg-purple-100/60" },
               { name: "Kevin", age: 24, category: "Anniversary", text: "Awalnya skeptis beli bunga online, tapi pas dateng... gila sih, rapi banget. Cewek gue seneng parah. Bakal langganan!", color: "bg-blue-50/80" },
               { name: "Rio", age: 25, category: "Kado Ibu", text: "Ngasih ini buat Hari Ibu, nyokap sampe speechless. Kualitas bunganya top tier, ga layu-layu kayak bunga asli biasa.", color: "bg-orange-50/80" },
-              { name: "Tasya", age: 27, category: "Wedding", text: "Sumpah nyesel baru tau FleurFinder sekarang. Bunga abadi buat pajangan nikahan gue beneran jadi center of attention! 🥺", color: "bg-rose-50/90" }
+              { name: "Tasya", age: 27, category: "Wedding", text: "Sumpah nyesel baru tau FLEUR PIPELINE sekarang. Bunga abadi buat pajangan nikahan gue beneran jadi center of attention! 🥺", color: "bg-rose-50/90" }
             ].map((testi, i) => (
               <motion.div 
                 key={i}
@@ -302,10 +330,10 @@ export default function Page() {
                     <Star key={j} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                   ))}
                 </div>
-                <p className="text-gray-700 font-montserrat text-sm mb-6 leading-relaxed flex-grow">"{testi.text}"</p>
+                <p className="text-gray-700 font-sans text-sm mb-6 leading-relaxed flex-grow">"{testi.text}"</p>
                 
                 <div className="mt-auto w-full border-t border-white/50 pt-4">
-                  <h4 className="text-pink-800 font-playfair font-bold text-lg">{testi.name}, {testi.age}</h4>
+                  <h4 className="text-pink-800 font-sans font-bold text-lg">{testi.name}, {testi.age}</h4>
                   <span className="inline-block mt-1 px-3 py-1 bg-white/60 text-pink-600 rounded-full text-xs font-semibold uppercase tracking-wider">{testi.category}</span>
                 </div>
               </motion.div>
@@ -332,12 +360,23 @@ export default function Page() {
         transition={{ duration: 0.8 }}
         className="w-full max-w-6xl mx-auto z-10 text-center mt-32 mb-16 px-4"
       >
-        <h2 className="text-4xl font-playfair font-bold text-gray-800 mb-4">Sering Ditanyakan (FAQ)</h2>
-        <p className="text-gray-600 font-montserrat mb-10 max-w-2xl mx-auto">Jawaban cepat untuk pertanyaan yang paling sering diajukan tentang bunga abadi kami.</p>
+        <h2 className="text-4xl font-sans font-bold text-gray-800 mb-4">Sering Ditanyakan (FAQ)</h2>
+        <p className="text-gray-600 font-sans mb-10 max-w-2xl mx-auto">Jawaban cepat untuk pertanyaan yang paling sering diajukan tentang bunga abadi kami.</p>
         <FAQSection />
       </motion.div>
 
       <Footer />
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={!!paymentModal}
+        onClose={() => setPaymentModal(null)}
+        productName={paymentModal?.name ?? ""}
+        productPrice={paymentModal?.price ?? ""}
+      />
     </main>
   );
 }
+
+
+

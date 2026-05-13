@@ -19,7 +19,7 @@ const FAQ_DATA = [
   },
   {
     question: "Apakah saya bisa pesan kustom?",
-    answer: "Bisa banget! Setelah mengisi form FleurFinder, Anda bisa diskusi kustomisasi lewat WhatsApp kami."
+    answer: "Bisa banget! Setelah mengisi form FLEUR PIPELINE, Anda bisa diskusi kustomisasi lewat WhatsApp kami."
   }
 ];
 
@@ -44,7 +44,7 @@ export default function FAQSection() {
               onClick={() => toggleOpen(index)}
               className="w-full flex justify-between items-center p-6 text-left"
             >
-              <h3 className="text-xl font-playfair font-bold text-gray-800 pr-8">
+              <h3 className="text-xl font-sans font-bold text-gray-800 pr-8">
                 {faq.question}
               </h3>
               <div className="flex-shrink-0 text-pink-500">
@@ -64,7 +64,7 @@ export default function FAQSection() {
                   }}
                   transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
                 >
-                  <div className="px-6 pb-6 pt-0 text-gray-600 font-montserrat leading-relaxed text-left">
+                  <div className="px-6 pb-6 pt-0 text-gray-600 font-sans leading-relaxed text-left">
                     {faq.answer}
                   </div>
                 </motion.div>
@@ -76,3 +76,5 @@ export default function FAQSection() {
     </div>
   );
 }
+
+

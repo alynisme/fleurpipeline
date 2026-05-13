@@ -1,27 +1,23 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Montserrat, Caveat } from "next/font/google";
+import { Inter, Dancing_Script } from "next/font/google";
 import { Toaster } from "sonner";
 import GlobalDecorations from "@/components/ui/GlobalDecorations";
 import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const dancingScript = Dancing_Script({
+  variable: "--font-dancing",
   subsets: ["latin"],
-});
-
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "FleurFinder - Bahasa Bunga untuk Si Dia",
+  title: "FLEUR PIPELINE",
   description: "Rekomendasi buket bunga yang tepat untuk pasangan Anda.",
 };
 
@@ -33,9 +29,9 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${playfair.variable} ${montserrat.variable} ${caveat.variable} h-full antialiased`}
+      className={`${inter.variable} ${dancingScript.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-montserrat text-gray-800 bg-white cursor-none">
+      <body className="min-h-full flex flex-col font-sans text-gray-800 bg-white cursor-none">
         <CustomCursor />
         <GlobalDecorations />
         <Toaster 
@@ -45,7 +41,7 @@ export default function RootLayout({
               background: '#F5F5DC', 
               color: '#831843', 
               border: '1px solid #FFC0CB',
-              fontFamily: 'var(--font-montserrat)'
+              fontFamily: 'var(--font-inter)'
             } 
           }} 
         />
